@@ -12,7 +12,7 @@
 
 ##  网络请求（Retrofit + OkHttp）
 
-## 🧵 协程（Coroutines）
+##  协程（Coroutines）
 - 协程基础（suspend / Dispatchers）
 - Flow / StateFlow
 - 协程在网络与UI中的应用
