@@ -19,7 +19,7 @@
 
 ## 内存与性能
 - 内存泄漏与 GC Root
-- LeakCanary 原理
+- LeakCanary 能检测到什么类型的内存泄漏？
 - Java 引用类型（强软弱虚）
 - 性能优化基础
 
