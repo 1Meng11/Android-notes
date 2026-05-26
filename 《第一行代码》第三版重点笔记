@@ -1,0 +1,173 @@
+## 一. android系统架构
+
+Android 系统并不是一个单纯运行 App 的环境，而是一套从底层硬件到上层应用完整连接起来的软件系统。它的整体架构可以理解为：底层由 Linux Kernel 管理硬件资源，中间通过 HAL、系统服务、运行时环境和 Framework 提供能力，最上层运行各种 Android 应用。
+从下到上看，Android 系统主要包括以下几个部分：Linux Kernel、HAL、System Services and Daemons、Android Runtime、System Services、Android Framework、Android API / System API，以及不同类型的应用程序。图中为asop官方文档的架构图。
+
+![image](assets/image-20260523223920-eycj1dx.png)
+
+### 1.1 Android 五层架构
+
+Android 系统通常可以简化为五层。
+
+![image](assets/image-20260523231913-c19zdi3.png)
+
+第一层是 Linux Kernel，也就是 Linux 内核层。Android 系统本身是基于 Linux 内核构建的，因此很多底层能力都依赖 Linux 内核完成，例如进程管理、内存管理、电源管理、网络协议栈，以及摄像头、蓝牙、Wi-Fi、音频、显示等硬件驱动。
+
+第二层是硬件抽象层（Hardware Abstraction Layer / HAL）这一层是 Android 框架与 Linux 内核驱动之间的桥梁。它由多个模块化接口（如音频、蓝牙、相机）组成，为上层提供了一套标准的 API。这种设计使得 Android 系统无需关心底层硬件的具体实现，从而能够在各种不同的硬件设备上运行。
+
+第三层是 系统运行库层（Android Runtime、Native Libraries、System Services and Daemons）。这一层包含很多 C/C++ 库和 Android Runtime。例如 SQLite 提供数据库支持，OpenGL ES 提供图形渲染能力，WebKit 或相关组件提供网页渲染支持。Android Runtime 则负责运行 Android 应用。在早期 Android 版本中使用 Dalvik 虚拟机，后来主要使用 ART。ART 针对移动设备做了优化，使应用能够更高效地运行。
+
+第四层是 应用框架层（Android Framework、Android API、System API、System Services）。这一层为开发者提供各种常用 API，例如 Activity 管理、窗口管理、资源管理、通知管理、位置服务、包管理等。普通 Android 开发者平时写 App 时，主要接触的就是这一层提供的接口。
+
+第五层是 应用层（Android Apps、Privileged Apps、Device Manufacturer Apps）。所有安装在手机上的应用都属于这一层，包括系统自带的联系人、短信、设置，也包括从应用商店下载的第三方 App，以及开发者自己写的应用。
+
+## 1.2 安卓架构中每层的作用
+
+### 1.2.1 Linux Kernel
+
+Linux Kernel 是 Android 系统最底层的部分，负责直接管理硬件和系统资源。Android 设备上的很多基础能力都依赖 Linux 内核完成，例如：进程管理，内存管理，文件系统，网络通信，电源管理，安全机制，硬件驱动，例如屏幕、摄像头、蓝牙、Wi-Fi、音频、电池等硬件设备，最终都需要通过 Linux Kernel 提供底层支持。
+简单来说，Linux Kernel 是 Android 系统和硬件之间最基础的桥梁。上层应用不会直接操作硬件，而是通过系统层层封装，最终由内核和驱动完成真正的硬件访问。
+
+### 1.2.2 HAL
+
+HAL 的全称是 Hardware Abstraction Layer，也就是硬件抽象层。它的作用是把具体硬件的实现细节隐藏起来，对上层提供统一的接口。不同 Android 设备的硬件可能完全不同。比如不同手机厂商使用的摄像头模组、蓝牙芯片、音频芯片、传感器都可能不一样。如果 Android Framework 直接面对这些硬件差异，系统会变得非常复杂。HAL 的作用就是在硬件和 Framework 之间加一层抽象。上层只需要调用统一接口，不需要关心底层硬件具体是哪个厂商、哪种型号、如何实现。所以 HAL 可以理解为厂商适配硬件的关键位置。设备厂商需要根据自己的硬件实现对应的 HAL，上层 Android 系统才能正常使用这些硬件功能。
+
+### 1.2.3 System Services and Daemons
+
+System Services and Daemons 指的是系统底层的一些服务和守护进程。这些服务通常运行在后台，负责支持系统的基础功能。它们不像普通 App 一样直接和用户交互，但 Android 系统的很多能力都离不开它们。例如系统启动、网络管理、日志记录、设备状态管理、媒体服务、权限相关服务等，都可能依赖这些底层服务或守护进程。可以把它理解成 Android 系统后台持续运行的一批“基础工作人员”。它们负责维持系统正常运行，并为更上层的系统服务和应用提供支持。
+
+### 1.2.4 Android Runtime
+
+Android Runtime 是 Android 应用运行所依赖的运行时环境。普通 Android 应用通常使用 Java 或 Kotlin 编写，但手机硬件并不能直接运行 Java/Kotlin 源代码。因此，应用代码需要经过编译，并在 Android Runtime 提供的环境中执行。早期 Android 使用 Dalvik 虚拟机，后来主要使用 ART，也就是 Android Runtime。
+ART 的作用包括：执行 Android 应用代码；管理应用运行时的内存；进行垃圾回收；提高应用运行效率；支持每个 App 在相对独立的进程中运行。每个 Android App 通常运行在自己的进程中，并有独立的运行环境。这样可以提高系统稳定性和安全性。某个 App 崩溃时，一般不会直接影响整个系统。
+
+## 1.2.5 System Services
+
+System Services 是 Android Framework 中非常核心的一部分。它们负责管理系统中的各种重要功能，并通过 Framework 提供给上层应用使用。
+常见的 System Services 包括：
+Activity Manager：管理 Activity、任务栈和应用进程；
+Window Manager：管理窗口显示；
+Package Manager：管理应用安装、卸载和信息查询；
+Location Manager：提供定位服务；
+Notification Manager：管理通知；
+Power Manager：管理电源状态；
+Sensor Manager：管理传感器访问；
+Connectivity Manager：管理网络连接。
+普通 App 并不会直接操作底层系统资源，而是通过这些 System Services 间接使用系统能力。
+例如，一个 App 想发送通知，并不是自己直接控制系统通知栏，而是调用 NotificationManager，由系统服务统一管理通知显示。
+
+### 1.2.6 Android Framework
+
+Android Framework 是 Android 应用开发最常接触的一层。它对底层复杂的系统能力进行了封装，并向开发者提供一套相对稳定、统一的开发接口。开发者写 App 时常用的 Activity、Service、BroadcastReceiver、ContentProvider、View、Fragment、Intent、Notification 等，都属于 Framework 提供的能力。Android Framework 的意义在于：开发者不需要理解底层驱动、HAL、系统服务的具体实现，也能调用系统功能来开发应用。
+
+### 1.2.7 Android API 和 System API
+
+在 Framework 之上，还可以看到 Android API 和 System API。
+Android API 是普通第三方应用可以使用的公开接口。开发者平时写 Android App，主要使用的就是 Android API。这些 API 相对稳定，适合应用开发者长期使用。
+System API 则更偏向系统应用或特权应用使用。它通常涉及更深层的系统能力，普通第三方 App 不能随便调用。例如某些设备管理、系统配置、底层权限相关功能，就可能属于 System API 的范围。因此，Android API 面向普通应用开发者，而 System API 更多面向系统应用、厂商应用或系统级开发。
+
+### 1.2.8 Apps
+
+- Android Apps 指的是普通 Android 应用，也就是用户平时安装和使用的大部分 App。
+  这些应用通常运行在应用层，通过 Android API 调用系统能力。例如微信、浏览器、地图、音乐软件、购物软件等，都属于普通 Android Apps。
+  普通 App 的权限受到系统限制，不能随便访问底层系统资源。比如访问摄像头、定位、联系人、存储等功能时，都需要申请权限。
+  这样做的目的是保证系统安全，防止应用随意访问用户隐私或破坏系统稳定性。
+- Privileged Apps 是特权应用，通常是预装在系统分区中的应用。
+  它们比普通第三方 App 拥有更高的权限，可以访问一些普通 App 无法使用的 System API。
+  例如系统设置、权限管理、系统更新、电话服务相关应用，可能就属于特权应用。
+  特权应用一般由系统厂商或系统开发者控制，不是普通开发者随便安装一个 App 就能获得这种权限。
+- Device Manufacturer Apps 指的是设备厂商应用。
+  例如手机厂商自己开发的相机、文件管理器、系统管家、主题商店、云服务、设备诊断工具等，都可以属于这一类。
+  这些应用通常和厂商自己的硬件或系统定制功能绑定比较紧。它们可能会调用厂商自己实现的接口，也可能和底层 HAL 或系统服务有更密切的关系。
+  例如某个手机厂商的相机 App，可能会针对自家摄像头硬件做专门优化；系统管家 App 可能会结合厂商自己的电源管理策略、后台管理策略来工作。
+
+## 1.3 Android 四大核心组件
+
+四大组件是构成一个 Android 应用的基本构建块。每个组件都是一个独立的实体，系统可以通过它进入你的应用。
+
+Activity（活动）
+
+功能：
+本质是一个“可视化的界面容器”，负责展示 UI 界面、接收用户操作（如点击、输入），并协调背后的业务逻辑，是用户能直接看到、摸到的应用窗口。
+
+Service（服务）
+
+功能：
+在后台执行长时间运行的操作，不提供用户界面。即使用户退出了应用，Service 仍然是可以继续运行的。
+
+Broadcast Receiver（广播接收器）
+
+功能：
+响应来自系统或其他应用的广播消息。它本身没有界面，但可以启动 Activity 或 Service 来响应收到的信息。
+
+Content Provider（内容提供者）
+
+功能：
+管理共享的应用数据集，提供统一的数据访问接口，实现应用间的数据共享
+
+## 二. android开发环境搭建
+
+开发Android程序需要准备的工具主要有以下3个。
+
+1. JDK。JDK是Java语言的软件开发工具包，它包含了Java的运行环境、工具集合、基础类库
+   等内容。
+2. Android SDK。Android SDK是Google提供的Android开发工具包，在开发Android程
+   序时，我们需要通过引入该工具包来使用Android相关的API。
+3. Android Studio。
+
+上述软件并不需要一个个地下载，为了简化搭建开发环境的过程，Google将所有需要用到的工具都帮我们集成好了，到Android官网就可以下载最新的开发工具，下载地址是：https://developer.android.google.cn/studio。不过，Android官网有时访问会不太稳定，如果你无法访问上述网址，也可以到一些国内的代理站点进行下载，比如：http://www.android-studio.org。
+
+根据操作系统选择合适的安装包，安装路径必须全英文无空格。安装过程建议勾选所有的默认组件，android sdk、android sdk platform、AVD。
+
+### 2.1 JDK配置：
+
+如果是2024版本已经内置，无需安装，验证方法：
+![image](assets/image-20260523232723-efrlk9n.png)
+
+2.2sdk配置
+
+在SDK标签页面中，确保安装了一个较新版本的android API 版本的 sdk platform。
+
+
+![image](assets/image-20260523232835-f4c1xhj.png)
+
+在SDK tools标签页中 ，确保以下tools安装并且已经更新到最新版本。
+
+：android SDK Build-Tools
+
+：android SDK platform-Tools
+
+：android emulator
+
+：NDK(可选，用于c++开发)
+
+![image](assets/image-20260524003501-pcvbodw.png)
+
+创建安卓虚拟设备(AVD)，点击create virtual device选择设备类型，然后选择一个device进行系统镜像下载，即模拟器要运行的android版本。
+
+![image](assets/image-20260524003921-p4bp0ck.png)
+
+![image](assets/image-20260524003945-zoj30q6.png)
+
+最后点击finish即可。
+
+
+## 三. 项目结构分析
+
+### 3.1 外层项目结构
+
+1. .idea/和.gradle/：由android studio和Gradle自动生成目录，分别用于存放ide配置和构建缓存，无需修改，且应该从版本控制中忽略。
+2. app/ ：应用的主模块目录。我们开发的大部分代码和资源都放在这里。
+3. gradle/：包含Gradle Wrapper相关，确保所有开发者用统一的gradle版本构建项目。
+4. .gitignore：git忽略列表文件，用于告诉版本控制系统哪些文件或目录不应该被追踪。
+5. gradlew和gradlew.bat：Gradle Wapper的可执行脚本，分别用于Mac/linux和windows，让我们可以在命令行执行构建任务。
+6. build.gradle.kts：项目级构建脚本，是整个项目总纲，负责配置所用模块共享的构建规则。比如配置代码仓库：定义gradle从哪里下载依赖库，比如google，mavencentral。定义全局gradle插件和版本
+7. settings.gradle.kts：项目设置文件。核心作用是注册项目包含的所有模块。比如include:'app'声明项目中存在一个app模块。
+8. local.properties：本地配置文件。存放开发者本机敏感或特定环境信息(最常见的是Android SDK路径)。此文件不应提交到版本控制系统。
+
+## 3.2 内层app模块核心文件
+
+最核心的工作区域，包含了构成应用的全部代码与资源。
+
+1. build/：模块的构建输出目录。所有编译产物包括最终APK和AAB安装包都在这里生成。
+2. src/：源文件，所有开发工作都在这里展开，划分为不同的
