@@ -1,5 +1,5 @@
 # Android-notes
-
+hi 这是我的安卓学习笔记，包括从《第一行代码》到.....
 ##  Android 基础
 
 ## 屏幕适配（Screen Adaptation）
