@@ -1,25 +1,32 @@
-# Android-notes
-hi 这是我的安卓学习笔记，包括从《第一行代码》到.....
-##  Android 基础
+# Android Notes
 
-## 屏幕适配（Screen Adaptation）
+Hi，这是一个面向初学者的 Android 应用层学习笔记仓库(*╹▽╹*)。
 
-##  Jetpack Compose
-- Compose 基础与重组机制
-- 状态管理（State / State Hoisting）
-- 常用布局（Row / Column / LazyColumn）
-- 副作用处理（LaunchedEffect 等）
+仓库里的内容主要来自我在学习 Android 过程中的阅读、整理、实践和总结。整体会尽量用新手能看懂的方式来写，重点放在概念理解、项目结构认知、常见开发流程和实用知识点上。
 
-##  网络请求（Retrofit + OkHttp）
+## 这个仓库会记录什么
 
-##  协程（Coroutines）
-- 协程基础（suspend / Dispatchers）
-- Flow / StateFlow
-- 协程在网络与UI中的应用
+- Android 基础概念与系统架构
+- Android Studio 开发环境与项目结构
+- Activity / Fragment / Service 等核心组件
+- UI 布局、资源系统与页面跳转
+- Jetpack 常用组件
+- Kotlin 在 Android 开发中的基础使用
+- 网络请求、协程、数据存储
+- 屏幕适配、性能优化与常见问题整理
 
-## 内存与性能
-- 内存泄漏与 GC Root
-- LeakCanary 能检测到什么类型的内存泄漏？
-- Java 引用类型（强软弱虚）
-- 性能优化基础
+## 当前笔记目录
 
+### Android 基础
+
+- [第一章 系统架构与项目创建](./第一章%20系统架构与项目创建.md)
+.............
+## 后续计划
+
+- 继续补完整个 Android 应用层学习路径
+- 每一章尽量做到“概念 + 结构 + 示例 + 小结”
+- 逐步加入更贴近实际开发的例子和踩坑记录
+
+## 说明
+
+这是个人学习型笔记仓库，内容会持续更新，也可能随着理解加深而反复修改。如果你也在学 Android，希望这些笔记能帮你更顺利地建立起整体认知。

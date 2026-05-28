@@ -39,6 +39,18 @@
             "id": "206b609eaca4b595",
             "type": "leaf",
             "state": {
+              "type": "image",
+              "state": {
+                "file": "图片资源/Pasted image 20260529010245.png"
+              },
+              "icon": "lucide-image",
+              "title": "Pasted image 20260529010245"
+            }
+          },
+          {
+            "id": "8315036448e0339b",
+            "type": "leaf",
+            "state": {
               "type": "markdown",
               "state": {
                 "file": "第一章 系统架构与项目创建.md",
@@ -48,23 +60,9 @@
               "icon": "lucide-file",
               "title": "第一章 系统架构与项目创建"
             }
-          },
-          {
-            "id": "2887639291f4d666",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "未命名.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "未命名"
-            }
           }
         ],
-        "currentTab": 2
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -226,13 +224,14 @@
       "bases:新建数据库": false
     }
   },
-  "active": "206b609eaca4b595",
+  "active": "8315036448e0339b",
   "lastOpenFiles": [
-    "Pasted image 20260529010245.png",
-    "Pasted image 20260529010243.png",
     "未命名.md",
-    "Pasted image 20260526194335.png",
     "第一章 系统架构与项目创建.md",
+    "图片资源/Pasted image 20260529010243.png",
+    "图片资源/Pasted image 20260529010245.png",
+    "README.md",
+    "Pasted image 20260526194335.png",
     "图片资源/assets/深入理解Java虚拟机：JVM高级特性与最佳实践（第3版） 华章原创精品 - 周志明-P4-20250808010620-2a8bp70.png",
     "图片资源/assets/深入理解Java虚拟机：JVM高级特性与最佳实践（第3版） 华章原创精品 - 周志明-P3-20250808010613-q3hpjq3.png",
     "图片资源/assets/深入理解Java虚拟机：JVM高级特性与最佳实践（第3版） 华章原创精品 - 周志明-P3-20250808010558-6ktxnpa.png",
@@ -250,10 +249,8 @@
     "图片资源/assets/img026-20250818210545-ytgk23b.png",
     "图片资源/assets/img025-20250818210545-b11zv6e.png",
     "图片资源/assets/img024-20250818210545-03amu5a.png",
-    "图片资源/assets/img023-20250818210545-wklo0u9.png",
     "图片资源/assets/bugfix-20260402023607-r18rpch.md",
     "图片资源/assets",
-    "README.md",
     "图片资源",
     "未命名.canvas"
   ]
